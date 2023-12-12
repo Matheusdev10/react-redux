@@ -3,12 +3,12 @@ import FormItem, { Inputs } from './components/FormItem';
 import Table from './components/Table';
 import { v4 as uuid } from 'uuid';
 
-export interface Item extends Inputs {
+export interface Users extends Inputs {
   id: string;
 }
 
 const App = () => {
-  const [table, setTable] = useState<Array<Item>>([]);
+  const [table, setTable] = useState<Array<Users>>([]);
 
   const onSubmit = (props: Inputs) => {
     setTable((prevState) => [...prevState, { ...props, id: uuid() }]);

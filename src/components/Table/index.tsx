@@ -1,34 +1,37 @@
 import React from 'react';
-import { Item } from '../../App';
+import { Users } from '../../App';
 
-interface ITable {
-  table: Array<Item>;
+export interface IUser {
+  table: Array<Users>;
 }
-const Table: React.FC<ITable> = ({ table }) => {
+
+const Table: React.FC<IUser> = ({ table }) => {
   return (
     <table>
       <thead>
         <tr>
+          <th>id</th>
           <th>nome</th>
-          <th>dataNascimento</th>
           <th>cpf</th>
-          <th>senha</th>
+          <th>DataNascimento</th>
           <th>email</th>
+          <th>senha</th>
         </tr>
       </thead>
       <tbody>
-        {table.map((tb) => (
+        {table.map(({ id, nome, cpf, dataNascimento, email, senha }) => (
           <tr>
-            <td>{tb.id}</td>
-            <td>{tb.nome}</td>
-            <td>{tb.dataNascimento}</td>
-            <td>{tb.cpf}</td>
-            <td>{tb.senha}</td>
-            <td>{tb.email}</td>
+            <td>{id}</td>
+            <td>{nome}</td>
+            <td>{cpf}</td>
+            <td>{dataNascimento}</td>
+            <td>{email}</td>
+            <td>{senha}</td>
           </tr>
         ))}
       </tbody>
     </table>
   );
 };
+
 export default Table;

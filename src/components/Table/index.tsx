@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users } from '../../App';
+import { Users } from '../../pages/Users';
 
 export interface IUser {
   table: Array<Users>;

@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import FormItem, { Inputs } from './components/FormItem';
-import Table from './components/Table';
+import FormItem, { Inputs } from '../../components/FormItem';
+import Table from '../../components/Table';
 import { v4 as uuid } from 'uuid';
 
 export interface Users extends Inputs {
   id: string;
 }
 
-const App = () => {
+const Users = () => {
   const [table, setTable] = useState<Array<Users>>([]);
 
   const onSubmit = (props: Inputs) => {
@@ -22,4 +22,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Users;

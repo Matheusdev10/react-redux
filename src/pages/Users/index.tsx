@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import FormItem, { Inputs } from '../../components/FormItem';
-import Table from '../../components/Table';
 import { v4 as uuid } from 'uuid';
+import TableUsers from '../../components/TableUsers';
+import FormUsers, { Inputs } from '../../components/FormUsers';
+import { Container } from '@mui/material';
 
 export interface Users extends Inputs {
   id: string;
@@ -15,10 +16,10 @@ const Users = () => {
   };
 
   return (
-    <div>
-      <FormItem onSubmit={onSubmit} />
-      <Table table={table} />
-    </div>
+    <Container>
+      <FormUsers onSubmit={onSubmit} />
+      <TableUsers table={table} />
+    </Container>
   );
 };
 

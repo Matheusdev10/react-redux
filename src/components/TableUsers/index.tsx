@@ -5,7 +5,7 @@ export interface IUser {
   table: Array<Users>;
 }
 
-const Table: React.FC<IUser> = ({ table }) => {
+const TableUsers: React.FC<IUser> = ({ table }) => {
   return (
     <table>
       <thead>
@@ -34,4 +34,4 @@ const Table: React.FC<IUser> = ({ table }) => {
   );
 };
 
-export default Table;
+export default TableUsers;

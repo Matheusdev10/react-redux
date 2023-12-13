@@ -1,6 +1,10 @@
 import React from 'react';
-import { Users } from '../../pages/Users';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { IUser } from '../../store/features/users/Slice';
+import { useDispatch } from 'react-redux';
+import { removeUser } from '../../store/features/users/Slice';
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -9,11 +13,17 @@ import {
   TableRow,
 } from '@mui/material';
 
-export interface IUser {
-  table: Array<Users>;
+export interface IUsers {
+  table: Array<IUser>;
 }
 
-const TableUsers: React.FC<IUser> = ({ table }) => {
+// export interface IFormUsers {
+//   onSubmit(data: IInputs): void;
+// }
+
+const TableUsers: React.FC<IUsers> = ({ table }) => {
+  const dispatch = useDispatch();
+
   return (
     <TableContainer sx={{ marginTop: 4 }}>
       <Table size="small" aria-label="a dense table">
@@ -36,6 +46,24 @@ const TableUsers: React.FC<IUser> = ({ table }) => {
               <TableCell align="right">{dataNascimento}</TableCell>
               <TableCell align="right">{email}</TableCell>
               <TableCell align="right">{senha}</TableCell>
+              <Button
+                onClick={() =>
+                  dispatch(
+                    removeUser({
+                      id,
+                      nome: '',
+                      cpf: '',
+                      dataNascimento: '',
+                      senha: '',
+                      email: '',
+                    })
+                  )
+                }
+                variant="outlined"
+                startIcon={<DeleteIcon />}
+              >
+                Delete
+              </Button>
             </TableRow>
           ))}
         </TableBody>

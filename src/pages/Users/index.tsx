@@ -1,24 +1,17 @@
-import { useState } from 'react';
-import { v4 as uuid } from 'uuid';
-import TableUsers from '../../components/TableUsers';
-import FormUsers, { Inputs } from '../../components/FormUsers';
+import FormUsers from '../../components/FormUsers';
 import { Container } from '@mui/material';
-
-export interface Users extends Inputs {
-  id: string;
-}
-
+import { addNewUser } from '../../store/features/users/Slice';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store/index';
+import TableUsers from '../../components/TableUsers';
 const Users = () => {
-  const [table, setTable] = useState<Array<Users>>([]);
+  const dispatch = useDispatch();
 
-  const onSubmit = (props: Inputs) => {
-    setTable((prevState) => [...prevState, { ...props, id: uuid() }]);
-  };
-
+  const { users } = useSelector((state: RootState) => state.user);
   return (
     <Container>
-      <FormUsers onSubmit={onSubmit} />
-      <TableUsers table={table} />
+      <FormUsers onSubmit={(data) => dispatch(addNewUser(data))} />
+      <TableUsers table={users} />
     </Container>
   );
 };

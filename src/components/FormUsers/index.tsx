@@ -6,13 +6,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import * as yup from 'yup';
 
-export type Inputs = {
+export interface IInputs {
   nome: string;
   cpf: string;
   dataNascimento: string;
   senha: string;
   email: string;
-};
+}
 
 const schema = yup
   .object({
@@ -34,7 +34,7 @@ const schema = yup
   .required();
 
 export interface IFormUsers {
-  onSubmit(data: Inputs): void;
+  onSubmit(data: IInputs): void;
 }
 
 const FormUsers: React.FC<IFormUsers> = ({ onSubmit }) => {
@@ -42,7 +42,7 @@ const FormUsers: React.FC<IFormUsers> = ({ onSubmit }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({ resolver: yupResolver(schema) });
+  } = useForm<IInputs>({ resolver: yupResolver(schema) });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

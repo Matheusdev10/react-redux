@@ -3,8 +3,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import SendIcon from '@mui/icons-material/Send';
 import { yupResolver } from '@hookform/resolvers/yup';
+
 import * as yup from 'yup';
-import { ErrorSharp } from '@mui/icons-material';
 
 export type Inputs = {
   nome: string;
@@ -17,11 +17,18 @@ export type Inputs = {
 const schema = yup
   .object({
     nome: yup.string().required('Nome é um campo obrigatório'),
-    cpf: yup.string().required('cpf é um campo obrigatório'),
+    cpf: yup
+      .string()
+      .required('cpf é um campo obrigatório')
+      .min(11, 'cpf inválido')
+      .max(11, 'cpf invalido'),
     dataNascimento: yup
       .string()
       .required('Data de Nascimento é um campo obrigatório'),
-    email: yup.string().required('Email é um campo obrigatório'),
+    email: yup
+      .string()
+      .email('Deve ser um email válido')
+      .required('Email é um campo obrigatório'),
     senha: yup.string().required('Senha é um campo obrigatório'),
   })
   .required();
@@ -43,6 +50,7 @@ const FormUsers: React.FC<IFormUsers> = ({ onSubmit }) => {
         <Grid xs={3}>
           <TextField
             fullWidth
+            error={!!errors.nome?.message}
             type="text"
             placeholder="nome"
             {...register('nome')}
@@ -55,6 +63,7 @@ const FormUsers: React.FC<IFormUsers> = ({ onSubmit }) => {
         <Grid xs={3}>
           <TextField
             fullWidth
+            error={!!errors.cpf?.message}
             type="text"
             placeholder="cpf"
             {...register('cpf')}
@@ -68,6 +77,7 @@ const FormUsers: React.FC<IFormUsers> = ({ onSubmit }) => {
         <Grid xs={3}>
           <TextField
             fullWidth
+            error={!!errors.dataNascimento?.message}
             type="date"
             {...register('dataNascimento')}
             id="outlined-basic"
@@ -79,6 +89,7 @@ const FormUsers: React.FC<IFormUsers> = ({ onSubmit }) => {
           <Grid xs={6}>
             <TextField
               fullWidth
+              error={!!errors.email?.message}
               type="email"
               placeholder="Email"
               {...register('email')}
@@ -91,6 +102,7 @@ const FormUsers: React.FC<IFormUsers> = ({ onSubmit }) => {
           <Grid xs={6}>
             <TextField
               fullWidth
+              error={!!errors.senha?.message}
               type="password"
               placeholder="Senha"
               {...register('senha')}

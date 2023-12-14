@@ -8,9 +8,11 @@ export interface IUser extends IInputs {
 
 export interface initialState {
   users: Array<IUser>;
+  filterText: string;
 }
 const initialState: initialState = {
   users: [],
+  filterText: '',
 };
 
 export const userSlice = createSlice({
@@ -18,19 +20,19 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     addNewUser: (state, action: PayloadAction<IInputs>) => {
-      const newUser: IUser = { ...action.payload, id: uuid() };
-      state.users.push(newUser);
+      state.users.push({ ...action.payload, id: uuid() });
     },
 
     removeUser: (state, action: PayloadAction<IUser>) => {
-      const removeUser = state.users.filter(
-        (user) => user.id !== action.payload.id
-      );
-      state.users = removeUser;
+      state.users = state.users.filter((user) => user.id !== action.payload.id);
+    },
+
+    searchUser: (state, action: PayloadAction<string>) => {
+      state.filterText = action.payload;
     },
   },
 });
 
-export const { addNewUser, removeUser } = userSlice.actions;
+export const { addNewUser, removeUser, searchUser } = userSlice.actions;
 
 export default userSlice.reducer;

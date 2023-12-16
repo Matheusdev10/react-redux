@@ -34,8 +34,8 @@ const TableUsers: React.FC<IUsers> = ({ table, onRemove, textFilter }) => {
         </TableHead>
         <TableBody>
           {table
-            .filter((item) =>
-              item.nome.toLowerCase().includes(textFilter.toLowerCase())
+            .filter((user) =>
+              user.nome.toLowerCase().includes(textFilter.toLowerCase())
             )
             .map(({ id, nome, cpf, dataNascimento, email, senha }) => (
               <TableRow key={id}>

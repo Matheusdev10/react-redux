@@ -1,10 +1,13 @@
 import { Button, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   function handleClickUsers() {
     navigate('/users');
+  }
+
+  function handleClickCompanies() {
+    navigate('/companies');
   }
   const navigate = useNavigate();
   return (
@@ -22,7 +25,11 @@ const Home = () => {
       >
         Usuários
       </Button>
-      <Button sx={{ marginInline: 'auto', width: '50%' }} variant="contained">
+      <Button
+        onClick={handleClickCompanies}
+        sx={{ marginInline: 'auto', width: '50%' }}
+        variant="contained"
+      >
         Empresas
       </Button>
     </Box>

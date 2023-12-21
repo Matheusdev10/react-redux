@@ -9,6 +9,10 @@ const Home = () => {
   function handleClickCompanies() {
     navigate('/companies');
   }
+
+  function handleClickFormalization() {
+    navigate('/formalization');
+  }
   const navigate = useNavigate();
   return (
     <Box
@@ -31,6 +35,13 @@ const Home = () => {
         variant="contained"
       >
         Empresas
+      </Button>
+      <Button
+        onClick={handleClickFormalization}
+        sx={{ marginInline: 'auto', width: '50%' }}
+        variant="contained"
+      >
+        Formalizações
       </Button>
     </Box>
   );

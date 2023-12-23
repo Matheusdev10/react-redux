@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import { format, addHours } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 import PauseCircleOutlineOutlinedIcon from '@mui/icons-material/PauseCircleOutlineOutlined';
 import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
@@ -13,6 +11,8 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { IFormalization } from '../../store/features/formalizations/Slice';
 
 export interface ITableFormalizations {
@@ -24,25 +24,26 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
 }) => {
   const regexCpf = /(\d{3})(\d{3})(\d{3})(\d{2})/;
   const regexCnpj = /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/;
+  const [data, setData] = useState<Array<IFormalization>>([...table]);
+  const [sortName, setSortName] = useState<'asc' | 'desc'>('asc');
 
-  const [ordenar, setOrdenar] = useState<Array<IFormalization>>(table);
-  const [order, setOrder] = useState('ASC');
-
-  function handleOrdenarNome() {
-    const ordenarNome = [...ordenar];
-    ordenarNome.sort(function (a, b) {
-      return a.nome < b.nome ? -1 : a.nome > b.nome ? 1 : 0;
+  const handleSortName = () => {
+    const sortedNome = [...table].sort((a, b) => {
+      const sortNomeAsc = sortName === 'asc' ? 1 : -1;
+      return sortNomeAsc * a.nome.localeCompare(b.nome);
     });
-    setOrdenar(ordenarNome);
-    console.log(ordenarNome);
-  }
+
+    setData(sortedNome);
+    setSortName(sortName === 'asc' ? 'desc' : 'asc');
+  };
+
   return (
     <TableContainer sx={{ marginTop: 4 }}>
       <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell
-              onClick={handleOrdenarNome}
+              onClick={handleSortName}
               sx={{ cursor: 'pointer' }}
               align="center"
             >
@@ -57,7 +58,7 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {table.map(
+          {data.map(
             ({ id, nome, cpfCnpj, data, produto, tipoCadastro, status }) => (
               <TableRow key={id}>
                 <TableCell align="center">{nome}</TableCell>

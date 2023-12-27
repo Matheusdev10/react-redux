@@ -3,9 +3,7 @@ import React, { useState } from 'react';
 import PauseCircleOutlineOutlinedIcon from '@mui/icons-material/PauseCircleOutlineOutlined';
 import ThumbDownOffAltOutlinedIcon from '@mui/icons-material/ThumbDownOffAltOutlined';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import { BasicModal } from '../BasicModal';
 import {
-  Button,
   Table,
   TableBody,
   TableCell,
@@ -14,6 +12,7 @@ import {
   TableRow,
 } from '@mui/material';
 import { format } from 'date-fns';
+import { BasicModal } from '../BasicModal';
 
 import { IFormalization } from '../../store/features/formalizations/Slice';
 
@@ -28,10 +27,40 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
   const regexCnpj = /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/;
   const [data, setData] = useState<Array<IFormalization>>([...table]);
   const [orderName, setOrderName] = useState<'asc' | 'desc'>('asc');
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState<
-    'aprovar' | 'reprovar' | 'analiseManual'
-  >('aprovar');
+
+  const [modal, setModal] = useState({
+    isOpen: false,
+    title: '',
+    description: '',
+  });
+
+  const handleAprove = () => {
+    setModal({
+      isOpen: true,
+      title: 'Aprovar Cadastro',
+      description: 'Tem certeza que deseja aprovar o cadastro',
+    });
+  };
+
+  const handleReprove = () => {
+    setModal({
+      isOpen: true,
+      title: 'Reprovar Cadastro',
+      description: 'Tem certeza que deseja reprovar o cadastro',
+    });
+  };
+
+  const handleWait = () => {
+    setModal({
+      isOpen: true,
+      title: 'Cadastro em espera',
+      description: 'Tem certeza que deseja colocar o cadastro em espera?',
+    });
+  };
+
+  const handleCloseModal = () => {
+    setModal({ isOpen: false, title: '', description: '' });
+  };
 
   const handleSortName = () => {
     const sortedNome = [...table].sort((a, b) => {
@@ -47,16 +76,6 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
 
     setData(sortedNome);
     setOrderName(orderName === 'asc' ? 'desc' : 'asc');
-  };
-
-  // const handleModalMessage = ()=>{
-  //   if(message === "aprovar"){
-  //     setMessage("aprovar")
-  //   }
-  // }}
-
-  const handleModalOpen = () => {
-    setOpen(open === false ? true : false);
   };
 
   return (
@@ -98,41 +117,29 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
                 <TableCell align="center">{tipoCadastro}</TableCell>
                 <TableCell align="center">{status}</TableCell>
                 <TableCell
-                  sx={{ cursor: 'pointer', display: 'flex', gap: 2 }}
-                  align="right"
-                >
-                  <PauseCircleOutlineOutlinedIcon onClick={handleModalOpen} />
-                  <BasicModal
-                    title="Reprovar Cadastro"
-                    description="Deseja confirmar a reprovação do cadastro?"
-                    isOpen={open}
-                    onCloseModal={handleModalOpen}
-                  />
+                  sx={{
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'end',
 
-                  <ThumbDownOffAltOutlinedIcon onClick={handleModalOpen} />
+                    gap: 2,
+                  }}
+                >
+                  <ThumbUpOutlinedIcon onClick={handleAprove} />
+                  <ThumbDownOffAltOutlinedIcon onClick={handleReprove} />
+                  <PauseCircleOutlineOutlinedIcon onClick={handleWait} />
+
                   <BasicModal
-                    title="Reprovar Cadastro"
-                    description="Deseja confirmar a reprovação do cadastro?"
-                    isOpen={open}
-                    onCloseModal={handleModalOpen}
-                  />
-                  <ThumbUpOutlinedIcon onClick={handleModalOpen} />
-                  <BasicModal
-                    title="Aprovar Cadastro"
-                    description="Deseja confirmar a aprovação do cadastro?"
-                    isOpen={open}
-                    onCloseModal={handleModalOpen}
+                    isOpen={modal.isOpen}
+                    title={modal.title}
+                    description={modal.description}
+                    onCloseModal={handleCloseModal}
                   />
                 </TableCell>
               </TableRow>
             )
           )}
-          {/* <BasicModal
-            isOpen={open}
-            onCloseModal={handleModalOpen}
-            title="Aprovar cadastro"
-            description="tem certeza que deseja aprovar o cadastro"
-          /> */}
         </TableBody>
       </Table>
     </TableContainer>

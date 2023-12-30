@@ -12,6 +12,7 @@ import {
   TableRow,
 } from '@mui/material';
 import { format } from 'date-fns';
+import { parseISOStringDate } from '../../utils/parseUtcDate';
 import { BasicModal } from '../BasicModal';
 
 import { IFormalization } from '../../store/features/formalizations/Slice';
@@ -25,7 +26,6 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
 }) => {
   const regexCpf = /(\d{3})(\d{3})(\d{3})(\d{2})/;
   const regexCnpj = /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/;
-  const [data, setData] = useState<Array<IFormalization>>([...table]);
   const [orderName, setOrderName] = useState<'asc' | 'desc'>('asc');
 
   const [modal, setModal] = useState({
@@ -34,11 +34,11 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
     description: '',
   });
 
-  const handleAprove = () => {
+  const handleApprove = () => {
     setModal({
       isOpen: true,
       title: 'Aprovar Cadastro',
-      description: 'Tem certeza que deseja aprovar o cadastro',
+      description: 'Tem certeza que deseja aprovar o cadastro?',
     });
   };
 
@@ -46,7 +46,7 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
     setModal({
       isOpen: true,
       title: 'Reprovar Cadastro',
-      description: 'Tem certeza que deseja reprovar o cadastro',
+      description: 'Tem certeza que deseja reprovar o cadastro?',
     });
   };
 
@@ -62,19 +62,16 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
     setModal({ isOpen: false, title: '', description: '' });
   };
 
-  const handleSortName = () => {
+  const sortedTable = (): Array<IFormalization> => {
     const sortedNome = [...table].sort((a, b) => {
       const sortNomeAsc = orderName === 'asc' ? 1 : -1;
-
-      console.log(sortNomeAsc * a.nome.localeCompare(b.nome));
       return sortNomeAsc * a.nome.localeCompare(b.nome);
-
-      //acredito que esse localeCompare compara da mesma
-      //forma que a função abaixo para ordenar
-      // a[nome]<b[nome]?1 : a[nome]>b[nome]?-1:0
     });
 
-    setData(sortedNome);
+    return sortedNome;
+  };
+
+  const toggleSorted = () => {
     setOrderName(orderName === 'asc' ? 'desc' : 'asc');
   };
 
@@ -84,7 +81,7 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
         <TableHead>
           <TableRow>
             <TableCell
-              onClick={handleSortName}
+              onClick={toggleSorted}
               sx={{ cursor: 'pointer' }}
               align="center"
             >
@@ -99,7 +96,7 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map(
+          {sortedTable().map(
             ({ id, nome, cpfCnpj, data, produto, tipoCadastro, status }) => (
               <TableRow key={id}>
                 <TableCell align="center">{nome}</TableCell>
@@ -112,8 +109,9 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
 
                 <TableCell align="center">{produto}</TableCell>
                 <TableCell align="center">
-                  {format(new Date(data), "dd/MM/yy ' às ' HH:mm'h'")}
+                  {format(new Date(), parseISOStringDate(data))}
                 </TableCell>
+
                 <TableCell align="center">{tipoCadastro}</TableCell>
                 <TableCell align="center">{status}</TableCell>
                 <TableCell
@@ -126,7 +124,7 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
                     gap: 2,
                   }}
                 >
-                  <ThumbUpOutlinedIcon onClick={handleAprove} />
+                  <ThumbUpOutlinedIcon onClick={handleApprove} />
                   <ThumbDownOffAltOutlinedIcon onClick={handleReprove} />
                   <PauseCircleOutlineOutlinedIcon onClick={handleWait} />
 
@@ -145,3 +143,5 @@ export const TableFormalization: React.FC<ITableFormalizations> = ({
     </TableContainer>
   );
 };
+
+//TODO: utilizar dialog do mui https://mui.com/material-ui/react-dialog/
